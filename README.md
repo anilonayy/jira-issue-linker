@@ -1,65 +1,46 @@
-# jira-comment-linker README
+## Jira Comment Linker - README
+Overview
+The Jira Comment Linker is a VS Code extension that makes JIRA task keys (e.g., PROJ-123) in your code clickable. When clicked, these keys open the corresponding JIRA task in your browser. Additionally, hovering over a task key provides useful details about the task, such as its status, assigned developer, QA, and completion date.
 
-This is the README for your extension "jira-comment-linker". After writing up a brief description, we recommend including the following sections.
 
-## Features
+## Configurations
+To use the extension, you need to configure your JIRA credentials and fields in your VS Code settings.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Open Settings `(Ctrl + , or Cmd + ,)`.
+- Search for jiraCommentLinker and configure the following settings:
 
-For example if there is an image subfolder under your extension project workspace:
+`jiraCommentLinker.jiraBaseURL`: Base URL of your JIRA instance (e.g., https://yourcompany.atlassian.net).
 
-\!\[feature X\]\(images/feature-x.png\)
+`jiraCommentLinker.jiraToken`: Base64-encoded API token for JIRA.
+Format: email:api_token (encoded in Base64).
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+`jiraCommentLinker.jiraFields`:
+`developer`: Field key for the assigned developer.
+`qa`: Field key for the QA.
+`completeDate`: Field key for the task's completion date.
 
-## Requirements
+Example configuration in `settings.json`:
+```json
+{   
+  "jiraCommentLinker.jiraBaseURL": "https://yourcompany.atlassian.net",
+  "jiraCommentLinker.jiraToken": "dXNlcm5hbWU6YXBpX3Rva2Vu",
+  "jiraCommentLinker.jiraFields": {
+    "developer": "customfield_1",
+    "qa": "customfield_2",
+    "completeDate": "customfield_3"
+  }
+}
+```
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Features
+- Clickable Task Keys: Click or Ctrl/Command + Click on any JIRA task key to open it in your browser.
+- Hover Information: View task details (e.g., status, developer, QA, and completion date) by hovering over the task key.
+- Task Caching: Reduces API requests by caching task data for 5 minutes.
+- Customizable Fields: Configure which JIRA fields to display in hover information.
+- Dynamic Decorations: Highlights JIRA task keys in your code with an underline and blue text.
 
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## How to Use
+- Open a file in VS Code.
+- Write or paste a JIRA task key (e.g., PROJ-123) in your code.
+- Hover over the task key to view details.
+- Click or `Ctrl/Command + Click` on the task key to open it in your browser.
