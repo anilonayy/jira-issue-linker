@@ -24,19 +24,19 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "JIRA Comment Linker Settings",
+      "title": "JIRA Issue Linker Settings",
       "properties": {
-        "jiraCommentLinker.jiraBaseURL": {
+        "jiraIssueLinker.jiraBaseURL": {
           "type": "string",
           "default": "https://your-jira-instance.atlassian.net",
           "description": "Base URL of your JIRA instance."
         },
-        "jiraCommentLinker.jiraToken": {
+        "jiraIssueLinker.jiraToken": {
           "type": "string",
           "default": "",
           "description": "Base64-encoded API Token for JIRA authentication (e.g., 'email:token')."
         },
-        "jiraCommentLinker.jiraFields": {
+        "jiraIssueLinker.jiraFields": {
           "type": "object",
           "default": {
             "developer": "customField_123456",

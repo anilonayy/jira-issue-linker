@@ -12,7 +12,7 @@ function activate(context) {
     completeDate: '',
   };
   
-  const config = vscode.workspace.getConfiguration("jiraCommentLinker");
+  const config = vscode.workspace.getConfiguration("jiraIssueLinker");
 
   const issueRegex = /\b[A-Z]+-\d+\b/g;
   const jiraBaseUrl = config.get("jiraBaseURL") || "";
@@ -125,12 +125,7 @@ function activate(context) {
       
       decorations.push({
         range,
-        hoverMessage: `**Task:** [${match[0]}](${jiraBaseUrl}/browse/${match[0]})`,
-        command: {
-          command: "jiraCommentLinker.openTask",
-          title: "Open JIRA Task",
-          arguments: [`${jiraBaseUrl}/browse/${match[0]}`],
-        },
+        hoverMessage: `**Task:** [${match[0]}](${jiraBaseUrl}/browse/${match[0]})`
       });
     }
 
@@ -142,10 +137,6 @@ function activate(context) {
     const editor = vscode.window.activeTextEditor;
     if (editor) updateDecorations(editor);
   }
-
-  vscode.commands.registerCommand("jiraCommentLinker.openTask", (url) => {
-    vscode.env.openExternal(vscode.Uri.parse(url));
-  });
 
   vscode.workspace.onDidOpenTextDocument((document) => {
     const editor = vscode.window.activeTextEditor;
