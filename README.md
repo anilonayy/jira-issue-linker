@@ -32,7 +32,7 @@ Example configuration in `settings.json`:
 }
 ```
 
-## Features
+## Features
 - Clickable Task Keys: Click or Ctrl/Command + Click on any JIRA task key to open it in your browser.
 - Hover Information: View task details (e.g., status, developer, QA, and completion date) by hovering over the task key.
 - Task Caching: Reduces API requests by caching task data for 5 minutes.
