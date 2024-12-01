@@ -12,8 +12,6 @@ function activate(context) {
     completeDate: {},
   };
 
-  vscode.window.showInformationMessage("Jira Comment Linker is active!");
-
   function getUserSettings() {
     const config = vscode.workspace.getConfiguration("jiraCommentLinker");
 
@@ -38,12 +36,12 @@ function activate(context) {
 
     
     if (cachedData && (now - cachedData.timestamp) < CACHE_DURATION) {
-    console.log("Task retrieved from cache!", taskKey);
       return cachedData.data;
     }
 
     if (!jiraApiTokenBase64) {
       vscode.window.showErrorMessage("JIRA API Token (Base64) is not set!");
+
       return defaultResponse;
     }
 
@@ -150,7 +148,6 @@ function activate(context) {
   }
 
   vscode.commands.registerCommand("jiraCommentLinker.openTask", (url) => {
-  console.log("Opening URL ", url);
     vscode.env.openExternal(vscode.Uri.parse(url));
   });
 
@@ -181,9 +178,7 @@ function activate(context) {
   triggerDecorationsForCurrentEditor();
 }
 
-function deactivate() {
-  console.log("JIRA Comment Linker is deactivated.");
-}
+function deactivate() {}
 
 module.exports = {
   activate,
