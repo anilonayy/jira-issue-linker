@@ -6,10 +6,10 @@ function activate(context) {
   const CACHE_DURATION = 5 * 60 * 1000;
   
   const defaultResponse = {
-    status: "Error retrieving status",
+    status: "Error occurred while retrieving task details",
     developer: {},
     qa: {},
-    completeDate: {},
+    completeDate: '',
   };
   
   const config = vscode.workspace.getConfiguration("jiraCommentLinker");
@@ -55,7 +55,7 @@ function activate(context) {
         status: responseFields.status?.name ?? "-",
         developer: responseFields[fields.developer ?? ""] ?? {},
         qa: responseFields[fields.qa ?? ""] ?? {},
-        completeDate: responseFields[fields.completeDate ?? ""] ?? {},
+        completeDate: responseFields[fields.completeDate ?? ""] ?? '',
       };
       
       cache.set(taskKey, { data, timestamp: now });
