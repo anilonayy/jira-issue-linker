@@ -1,8 +1,8 @@
 {
-  "name": "jira-comment-linker",
-  "displayName": "Jira Comment Linker",
-  "description": "",
-  "version": "0.0.1",
+  "name": "jira-issue-linker",
+  "displayName": "Jira Issue Linker",
+  "description": "A Visual Studio Code extension that links JIRA issues in code to their corresponding issues in JIRA.",
+  "version": "1.0",
   "engines": {
     "vscode": "1.90.0"
   },
@@ -34,12 +34,7 @@
           "description": "Mapping of JIRA fields to their corresponding IDs."
         }
       }
-    },
-    "commands": [
-    {
-      "command": "jiraCommentLinker.openTask",
-      "title": "OPEN Jıra task"
-    }]
+    }
   },
   "scripts": {
     "lint": "eslint .",
