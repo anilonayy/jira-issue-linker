@@ -3,22 +3,13 @@ Overview
 The Jira Comment Linker is a VS Code extension that makes JIRA task keys (e.g., PROJ-123) in your code clickable. When clicked, these keys open the corresponding JIRA task in your browser. Additionally, hovering over a task key provides useful details about the task, such as its status, assigned developer, QA, and completion date.
 
 
+## Usage
+![image](assets/presentation.gif)
+
 ## Configurations
 To use the extension, you need to configure your JIRA credentials and fields in your VS Code settings.
 
 - Open Settings `(Ctrl + , or Cmd + ,)`.
-- Search for jiraCommentLinker and configure the following settings:
-
-`jiraCommentLinker.jiraBaseURL`: Base URL of your JIRA instance (e.g., https://yourcompany.atlassian.net).
-
-`jiraCommentLinker.jiraToken`: Base64-encoded API token for JIRA.
-Format: email:api_token (encoded in Base64).
-
-`jiraCommentLinker.jiraFields`:
-`developer`: Field key for the assigned developer.
-`qa`: Field key for the QA.
-`completeDate`: Field key for the task's completion date.
-
 Example configuration in `settings.json`:
 ```json
 {   
