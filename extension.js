@@ -11,20 +11,16 @@ function activate(context) {
     qa: {},
     completeDate: {},
   };
+  
+  const config = vscode.workspace.getConfiguration("jiraCommentLinker");
 
-  function getUserSettings() {
-    const config = vscode.workspace.getConfiguration("jiraCommentLinker");
+  const issueRegex = /\b[A-Z]+-\d+\b/g;
+  const jiraBaseUrl = config.get("jiraBaseURL") || "";
+  const jiraApiTokenBase64 = config.get("jiraToken") || "";
+  const fields = config.get("jiraFields") || {};
 
-    const jiraBaseUrl = config.get("jiraBaseURL") || "";
-    const jiraApiTokenBase64 = config.get("jiraToken") || "";
-    const fields = config.get("jiraFields") || {};
-
-    return { jiraBaseUrl, jiraApiTokenBase64, fields };
-  }
 
   async function getTaskDetail(taskKey) {
-    const { jiraBaseUrl, jiraApiTokenBase64, fields } = getUserSettings();
-    
     const cachedData = cache.get(taskKey);
     const now = Date.now();
     
@@ -52,10 +48,11 @@ function activate(context) {
           Accept: "application/json",
         },
       });
-
+      
       const responseFields = response?.data?.fields ?? {};
       const data = {
-        status: responseFields.status?.name ?? "Not available",
+        summary: responseFields.summary ?? "-",
+        status: responseFields.status?.name ?? "-",
         developer: responseFields[fields.developer ?? ""] ?? {},
         qa: responseFields[fields.qa ?? ""] ?? {},
         completeDate: responseFields[fields.completeDate ?? ""] ?? {},
@@ -81,25 +78,26 @@ function activate(context) {
       const taskKey = document.getText(range);
 
       return new Promise((resolve) => {
-        getTaskDetail(taskKey).then(({ developer, status, qa, completeDate }) => {
-          const popUpContext = [`**Status:** ${status}`];
+        getTaskDetail(taskKey).then(({ summary, developer, status, qa, completeDate }) => {
+          const popUpContext = [
+          `**Name:** ${summary}`,
+          `**Status:** ${status}`
+          ];
 
           if (Object.keys(developer).length) {
             popUpContext.push(
-            '**Developer**',
-            `![Developer Avatar](${(developer?.avatarUrls ?? [])["16x16"]}) ${developer.displayName}`
+            `**Developer:** ${developer.displayName}`
             );
           }
 
           if (Object.keys(qa).length) {
             popUpContext.push(
-             '**QA**',
-            `![QA Avatar](${(qa?.avatarUrls ?? [])["16x16"]}) ${qa.displayName}`
+            `**QA:** ${qa.displayName}`
             );
           }
 
           if (Object.keys(completeDate).length) {
-            popUpContext.push('**Complete Date**', completeDate);
+            popUpContext.push(`**Complete Date:** ${completeDate}`);
           }
 
           resolve(new vscode.Hover(popUpContext));
@@ -114,15 +112,13 @@ function activate(context) {
   });
 
   function updateDecorations(editor) {
-    const { jiraBaseUrl } = getUserSettings();
     if (!editor || !jiraBaseUrl) return;
 
     const text = editor.document.getText();
-    const regex = /\b[A-Z]+-\d+\b/g;
     const decorations = [];
 
     let match;
-    while ((match = regex.exec(text)) !== null) {
+    while ((match = issueRegex.exec(text)) !== null) {
       const startPos = editor.document.positionAt(match.index);
       const endPos = editor.document.positionAt(match.index + match[0].length);
       const range = new vscode.Range(startPos, endPos);
@@ -174,6 +170,26 @@ function activate(context) {
       vscode.languages.registerHoverProvider({ scheme: "file", language }, hoverProvider)
     );
   });
+  
+  const linkProvider = vscode.languages.registerDocumentLinkProvider('*', {
+    provideDocumentLinks(document) {
+        const text = document.getText();
+        const links = [];
+        let match;
+        while ((match = issueRegex.exec(text)) !== null) {
+            const start = document.positionAt(match.index);
+            const end = document.positionAt(match.index + match[0].length);
+            const range = new vscode.Range(start, end);
+            const link = vscode.Uri.parse(`${jiraBaseUrl}/browse/${match[0]}`); 
+
+            links.push(new vscode.DocumentLink(range, link));
+        }
+
+        return links;
+      },
+  });
+
+context.subscriptions.push(linkProvider);
 
   triggerDecorationsForCurrentEditor();
 }
