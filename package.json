@@ -1,8 +1,18 @@
 {
   "name": "jira-issue-linker",
   "displayName": "Jira Issue Linker",
-  "description": "A Visual Studio Code extension that links JIRA issues in code to their corresponding issues in JIRA.",
   "version": "1.0.0",
+  "license": "MIT",
+  "publisher": "anilonayy",
+  "description": "A Visual Studio Code extension that links JIRA issues in code to their corresponding issues in JIRA.",
+  "author": {
+    "name": "Cengizhan Anıl ONAY",
+    "email": "cengizhananilonay@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anilonayy/jira-issue-linker"
+  },
   "engines": {
     "vscode": "1.90.0"
   },
@@ -29,7 +39,9 @@
         "jiraCommentLinker.jiraFields": {
           "type": "object",
           "default": {
-            "developer": "customField_123456"
+            "developer": "customField_123456",
+            "qa": "customField_123456",
+            "completeDate": "customField_123456"
           },
           "description": "Mapping of JIRA fields to their corresponding IDs."
         }
