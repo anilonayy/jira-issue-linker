@@ -1,4 +1,8 @@
 ## Jira Issue Linker - README
+![Visual Studio Marketplace Installs - Azure DevOps Extension](https://img.shields.io/visual-studio-marketplace/azure-devops/installs/total/anilonayy.jira-issue-linker)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/anilonayy/jira-issue-linker)
+![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/anilonayy.jira-issue-linker)
+
 Overview
 The Jira Issue Linker is a VS Code extension that makes JIRA task keys (e.g., PROJ-123) in your code clickable. When clicked, these keys open the corresponding JIRA task in your browser. Additionally, hovering over a task key provides useful details about the task, such as its status, assigned developer, QA, and completion date.
 
