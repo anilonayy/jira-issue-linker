@@ -1,0 +1,60 @@
+{
+  "name": "jira-comment-linker",
+  "displayName": "Jira Comment Linker",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": ["onLanguage:javascript", "onLanguage:html", "onLanguage:css"],
+  "main": "./extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "JIRA Comment Linker Settings",
+      "properties": {
+        "jiraCommentLinker.jiraBaseURL": {
+          "type": "string",
+          "default": "https://your-jira-instance.atlassian.net",
+          "description": "Base URL of your JIRA instance."
+        },
+        "jiraCommentLinker.jiraToken": {
+          "type": "string",
+          "default": "",
+          "description": "Base64-encoded API Token for JIRA authentication (e.g., 'email:token')."
+        },
+        "jiraCommentLinker.jiraFields": {
+          "type": "object",
+          "default": {
+            "developer": "customField_123456"
+          },
+          "description": "Mapping of JIRA fields to their corresponding IDs."
+        }
+      }
+    },
+    "commands": [
+    {
+      "command": "jiraCommentLinker.openTask",
+      "title": "OPEN Jıra task"
+    }]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.9",
+    "@types/node": "20.x",
+    "@types/vscode": "1.90.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.13.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.8"
+  }
+}
