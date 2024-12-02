@@ -14,7 +14,7 @@
     "url": "https://github.com/anilonayy/jira-issue-linker"
   },
   "engines": {
-    "vscode": "1.90.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Other"
@@ -56,7 +56,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.9",
     "@types/node": "20.x",
-    "@types/vscode": "1.90.0",
+    "@types/vscode": "^1.90.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^9.13.0"
