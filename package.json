@@ -1,7 +1,7 @@
 {
   "name": "jira-issue-linker",
   "displayName": "Jira Issue Linker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "publisher": "anilonayy",
   "description": "A Visual Studio Code extension that links JIRA issues in code to their corresponding issues in JIRA.",
