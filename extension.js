@@ -6,6 +6,7 @@ function activate(context) {
   const CACHE_DURATION = 5 * 60 * 1000;
   
   const defaultResponse = {
+    summary: "-",
     status: "Error occurred while retrieving task details",
     developer: {},
     qa: {},
@@ -15,10 +16,13 @@ function activate(context) {
   const config = vscode.workspace.getConfiguration("jiraIssueLinker");
 
   const issueRegex = /\b[A-Z]+-\d+\b/g;
-  const jiraBaseUrl = config.get("jiraBaseURL") || "";
-  const jiraApiTokenBase64 = config.get("jiraToken") || "";
-  const fields = config.get("jiraFields") || {};
-
+  const jiraBaseURL = config.get("jiraBaseURL") || "";
+  const taskGetterURL = config.get("taskGetterURL") || "";
+  
+  if (!jiraBaseURL || !taskGetterURL) {
+    vscode.window.showErrorMessage("Jira issue linker: Jira base URL or task getter URL is not set")
+  }
+  
 
   async function getTaskDetail(taskKey) {
     const cachedData = cache.get(taskKey);
@@ -35,34 +39,24 @@ function activate(context) {
       return cachedData.data;
     }
 
-    if (!jiraApiTokenBase64) {
-      vscode.window.showErrorMessage("JIRA API Token (Base64) is not set!");
-
-      return defaultResponse;
-    }
 
     try {
-      const response = await axios.get(`${jiraBaseUrl}/rest/api/3/issue/${taskKey}`, {
-        headers: {
-          Authorization: `Basic ${jiraApiTokenBase64}`,
-          Accept: "application/json",
-        },
-      });
-      
-      const responseFields = response?.data?.fields ?? {};
+      const resp = await axios.get(`${taskGetterURL}/${taskKey}`);
+      const respData = resp.data ?? {};
+
       const data = {
-        summary: responseFields.summary ?? "-",
-        status: responseFields.status?.name ?? "-",
-        developer: responseFields[fields.developer ?? ""] ?? {},
-        qa: responseFields[fields.qa ?? ""] ?? {},
-        completeDate: responseFields[fields.completeDate ?? ""] ?? '',
+        summary: respData.title ?? '-',
+        status: respData.status ?? '-',
+        developer: respData.developer ?? '-',
+        qa: respData.qa_tester ?? '-',
+        completeDate: respData.last_uat_opam_date ?? '',
       };
       
       cache.set(taskKey, { data, timestamp: now });
 
       return data;
     } catch (error) {
-      vscode.window.showErrorMessage(`JIRA API request failed: ${error.message}`);
+      vscode.window.showErrorMessage(`API request failed: ${error.message}`);
       
       cache.set(taskKey, {data: defaultResponse, timestamp: now});
       
@@ -72,7 +66,7 @@ function activate(context) {
 
   const hoverProvider = {
     provideHover(document, position) {
-      const range = document.getWordRangeAtPosition(position, /\b[A-Z]+-\d+\b/);
+      const range = document.getWordRangeAtPosition(position, issueRegex);
       if (!range) return;
 
       const taskKey = document.getText(range);
@@ -84,19 +78,19 @@ function activate(context) {
           `**Status:** ${status}`
           ];
 
-          if (Object.keys(developer).length) {
+          if (developer) {
             popUpContext.push(
-            `**Developer:** ${developer.displayName}`
+            `**Developer:** ${developer}`
             );
           }
 
-          if (Object.keys(qa).length) {
+          if (qa) {
             popUpContext.push(
-            `**QA:** ${qa.displayName}`
+            `**QA:** ${qa}`
             );
           }
 
-          if (Object.keys(completeDate).length) {
+          if (completeDate) {
             popUpContext.push(`**Complete Date:** ${completeDate}`);
           }
 
@@ -112,7 +106,7 @@ function activate(context) {
   });
 
   function updateDecorations(editor) {
-    if (!editor || !jiraBaseUrl) return;
+    if (!editor || !jiraBaseURL) return;
 
     const text = editor.document.getText();
     const decorations = [];
@@ -125,7 +119,7 @@ function activate(context) {
       
       decorations.push({
         range,
-        hoverMessage: `**Task:** [${match[0]}](${jiraBaseUrl}/browse/${match[0]})`
+        hoverMessage: `**Task:** [${match[0]}](${jiraBaseURL}/browse/${match[0]})`
       });
     }
 
@@ -171,7 +165,7 @@ function activate(context) {
             const start = document.positionAt(match.index);
             const end = document.positionAt(match.index + match[0].length);
             const range = new vscode.Range(start, end);
-            const link = vscode.Uri.parse(`${jiraBaseUrl}/browse/${match[0]}`); 
+            const link = vscode.Uri.parse(`${jiraBaseURL}/browse/${match[0]}`); 
 
             links.push(new vscode.DocumentLink(range, link));
         }

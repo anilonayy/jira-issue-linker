@@ -31,19 +31,10 @@
           "default": "https://your-jira-instance.atlassian.net",
           "description": "Base URL of your JIRA instance."
         },
-        "jiraIssueLinker.jiraToken": {
+        "jiraIssueLinker.taskGetterURL": {
           "type": "string",
-          "default": "",
-          "description": "Base64-encoded API Token for JIRA authentication (e.g., 'email:token')."
-        },
-        "jiraIssueLinker.jiraFields": {
-          "type": "object",
-          "default": {
-            "developer": "customField_123456",
-            "qa": "customField_123456",
-            "completeDate": "customField_123456"
-          },
-          "description": "Mapping of JIRA fields to their corresponding IDs."
+          "default": "https://your-secret-endpoint.com",
+          "description": "Secret endpoint to get task."
         }
       }
     }
